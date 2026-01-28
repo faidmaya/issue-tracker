@@ -47,33 +47,34 @@ router.get('/:project', (req, res) => {
 
 /* PUT */
 router.put('/:project', (req, res) => {
-  const { _id, ...updates } = req.body
-
-  if (!_id) {
-    return res.json({ error: 'missing _id' })
-  }
-
-  const issue = issues.find(i => i._id === _id)
-  if (!issue) {
-    return res.json({ error: 'could not update', _id })
-  }
-
-  const fields = Object.keys(updates).filter(
-    k => updates[k] !== '' && updates[k] !== undefined
-  )
-
-  if (fields.length === 0) {
-    return res.json({ error: 'no update field(s) sent', _id })
-  }
-
-  fields.forEach(field => {
-    issue[field] = updates[field]
+    const { _id, ...updates } = req.body
+  
+    if (!_id) {
+      return res.json({ error: 'missing _id' })
+    }
+  
+    const issue = issues.find(i => i._id === _id)
+    if (!issue) {
+      return res.json({ error: 'could not update', _id })
+    }
+  
+    const fields = Object.keys(updates).filter(
+      k => updates[k] !== '' && updates[k] !== undefined
+    )
+  
+    if (fields.length === 0) {
+      return res.json({ error: 'no update field(s) sent', _id })
+    }
+  
+    fields.forEach(field => {
+      issue[field] = updates[field]
+    })
+  
+    issue.updated_on = new Date()
+  
+    return res.json({ result: 'successfully updated', _id })
   })
-
-  issue.updated_on = new Date()
-
-  res.json({ result: 'successfully updated', _id })
-})
+  
 
 /* DELETE */
 router.delete('/:project', (req, res) => {
