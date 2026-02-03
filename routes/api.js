@@ -54,9 +54,9 @@ router.put('/:project', (req, res) => {
     return res.json({ error: 'missing _id' })
   }
 
-  // 2️⃣ no update fields sent
-  const updateFields = Object.keys(updates).filter(
-    key => updates[key] !== undefined
+  // 2️⃣ check update fields
+  const updateFields = Object.keys(updates).filter(key =>
+    updates[key] !== undefined && updates[key] !== ''
   )
 
   if (updateFields.length === 0) {
@@ -78,6 +78,7 @@ router.put('/:project', (req, res) => {
 
   return res.json({ result: 'successfully updated', _id })
 })
+
 
 /* DELETE */
 router.delete('/:project', (req, res) => {
