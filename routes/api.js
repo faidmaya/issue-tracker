@@ -47,16 +47,16 @@ router.get('/:project', (req, res) => {
 
 /* PUT */
 router.put('/:project', (req, res) => {
-  const { _id, ...updates } = req.body
+  const { _id, ...rest } = req.body
 
   // 1️⃣ missing _id
   if (!_id) {
     return res.json({ error: 'missing _id' })
   }
 
-  // 2️⃣ check update fields
-  const updateFields = Object.keys(updates).filter(key =>
-    updates[key] !== undefined && updates[key] !== ''
+  // 2️⃣ check update fields (FCC rules)
+  const updateFields = Object.keys(rest).filter(key =>
+    rest[key] !== undefined && rest[key] !== ''
   )
 
   if (updateFields.length === 0) {
@@ -71,14 +71,13 @@ router.put('/:project', (req, res) => {
 
   // 4️⃣ apply updates
   updateFields.forEach(field => {
-    issue[field] = updates[field]
+    issue[field] = rest[field]
   })
 
   issue.updated_on = new Date()
 
   return res.json({ result: 'successfully updated', _id })
 })
-
 
 /* DELETE */
 router.delete('/:project', (req, res) => {
